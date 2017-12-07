@@ -18,6 +18,7 @@
     <link href="assets/css/style.css" rel="stylesheet" />
 </head>
 <body>
+<?php include 'connection.php'; ?>
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -79,92 +80,51 @@
                 </div>
                 <div class="main box-border">
                     <div id="mi-slider" class="mi-slider">
-                        <ul>
+                        <?php
 
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/coffee_pic1.jpg" alt="img01"><h4>Boots</h4>
-                            </a></li>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/2.jpg" alt="img02"><h4>Oxfords</h4>
-                            </a></li>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/3.jpg" alt="img03"><h4>Loafers</h4>
-                            </a></li>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/4.jpg" alt="img04"><h4>Sneakers</h4>
-                            </a></li>
-                            
-                        </ul>
-                         
-                        <ul>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/5.jpg" alt="img05"><h4>Belts</h4>
-                            </a></li>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/6.jpg" alt="img06"><h4>Hats &amp; Caps</h4>
-                            </a></li>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/7.jpg" alt="img07"><h4>Sunglasses</h4>
-                            </a></li>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/8.jpg" alt="img08"><h4>Scarves</h4>
-                            </a></li>
-                        </ul>
-                        <ul>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/9.jpg" alt="img09"><h4>Casual</h4>
-                            </a></li>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/10.jpg" alt="img10"><h4>Luxury</h4>
-                            </a></li>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/11.jpg" alt="img11"><h4>Sport</h4>
-                            </a></li>
-                        </ul>
-                        <ul>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/12.jpg" alt="img12"><h4>Carry-Ons</h4>
-                            </a></li>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/13.jpg" alt="img13"><h4>Duffel Bags</h4>
-                            </a></li>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/14.jpg" alt="img14"><h4>Laptop Bags</h4>
-                            </a></li>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/15.jpg" alt="img15"><h4>Briefcases</h4>
-                            </a></li>
-                        </ul>
-                        <ul>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/12.jpg" alt="img12"><h4>Carry-Ons</h4>
-                            </a></li>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/13.jpg" alt="img13"><h4>Duffel Bags</h4>
-                            </a></li>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/14.jpg" alt="img14"><h4>Laptop Bags</h4>
-                            </a></li>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/15.jpg" alt="img15"><h4>Briefcases</h4>
-                            </a></li>
-                        </ul>
-                        <ul>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/12.jpg" alt="img12"><h4>Carry-Ons</h4>
-                            </a></li>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/13.jpg" alt="img13"><h4>Duffel Bags</h4>
-                            </a></li>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/14.jpg" alt="img14"><h4>Laptop Bags</h4>
-                            </a></li>
-                            <li><a href="#">
-                                <img src="assets/ItemSlider/images/15.jpg" alt="img15"><h4>Briefcases</h4>
-                            </a></li>
-                        </ul>
+
+
+$sid = 1;
+
+while($sid < 7){
+
+$var = 0;
+
+$sql = "SELECT * FROM products WHERE sid = $sid";
+$result = $conn->query($sql);
+
+?>
+<ul>
+<?php
+
+if ($result->num_rows > 0) {
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+		?>
+            <li><a href="#">
+            <img src="assets/img/<?php echo $row["pimg"] ?>" alt="img05"><h4><?php echo $row["pname"] ?></h4>
+            </a></li>
+			<?php
+			$var++;
+			if($var>3 )
+			{
+				break;	
+			}
+			?>
+                       
+		<?php
+    }
+	$sid++;
+} else {
+    //echo "No results for user '$sid'";
+	$sid++;
+}
+
+?>
+</ul>
+<?php } ?>
                         <nav>
-                            <a href="#">Shoes</a>
+                            <a href="#">Coffee</a>
                             <a href="#">Accessories</a>
                             <a href="#">Watches</a>
                             <a href="#">Bags</a>
@@ -189,28 +149,17 @@
             </div>
             <div class="col-md-3">
                 
-                    <a href="#" class="list-group-item active">Electronics
+                    <a href="#" class="list-group-item active">Original Websites
                     </a>
                     <ul class="list-group">
 
-                        <li class="list-group-item">Website - 1
-      					<span class="label label-primary pull-right">10</span>
-                        </li>
-                        <li class="list-group-item">Website - 2
-                      <span class="label label-success pull-right">10</span>
-                        </li>
-                        <li class="list-group-item">Website - 3
-                         <span class="label label-danger pull-right">10</span>
-                        </li>
-                        <li class="list-group-item">Website - 4
-                         <span class="label label-danger pull-right">10</span>
-                        </li>
-                        <li class="list-group-item">Website - 5
-                         <span class="label label-danger pull-right">10</span>
-                        </li>
-                        <li class="list-group-item">Website - 6
-                         <span class="label label-danger pull-right">10</span>
-                        </li>
+                        <a href = "//www.sannisthsoni.com/lab272/home.php"> <li class="list-group-item">Soni's Cafe</li></a>
+                        <a href = "//Tintinvu.com"> <li class="list-group-item">Tin's Cell Phone Shop</li></a>
+                        <a href = "//projectmilind.com"> <li class="list-group-item">Adventure Junkies Club</li></a>
+                        <a href = "//Phatsweb.com"> <li class="list-group-item">PT Travel</li></a>
+                        <a href = "//mandipsinh.000webhostapp.com"> <li class="list-group-item">KiriMaan-Software Consultancy</li></a>
+                        <a href = "//ujjvalsoni.com"> <li class="list-group-item">Coffee - Better than Starbucks!</li></a>
+
                        
                     </ul>
                 </div>
@@ -354,45 +303,37 @@
                 </div>
                 <!-- /.row -->
                 <div class="row">
-                    <div class="col-md-4 text-center col-sm-6 col-xs-6">
-                        <div class="thumbnail product-box">
-                            <img src="assets/img/dummyimg.png" alt="" />
-                            <div class="caption">
-                                <h3><a href="#">Samsung Galaxy </a></h3>
-                                <p>Price : <strong>$ 3,45,900</strong>  </p>
-                                <p><a href="#">Ptional dismiss button </a></p>
-                                <p>Ptional dismiss button in tional dismiss button in   </p>
-                                <p><a href="#" class="btn btn-success" role="button">Add To Cart</a> <a href="#" class="btn btn-primary" role="button">See Details</a></p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-md-4 text-center col-sm-6 col-xs-6">
-                        <div class="thumbnail product-box">
-                            <img src="assets/img/dummyimg.png" alt="" />
-                            <div class="caption">
-                                <h3><a href="#">Samsung Galaxy </a></h3>
-                                <p>Price : <strong>$ 3,45,900</strong>  </p>
-                                <p><a href="#">Ptional dismiss button </a></p>
-                                <p>Ptional dismiss button in tional dismiss button in   </p>
-                                <p><a href="#" class="btn btn-success" role="button">Add To Cart</a> <a href="#" class="btn btn-primary" role="button">See Details</a></p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-md-4 text-center col-sm-6 col-xs-6">
-                        <div class="thumbnail product-box">
-                            <img src="assets/img/dummyimg.png" alt="" />
-                            <div class="caption">
-                                <h3><a href="#">Samsung Galaxy </a></h3>
-                                <p>Price : <strong>$ 3,45,900</strong>  </p>
-                                <p><a href="#">Ptional dismiss button </a></p>
-                                <p>Ptional dismiss button in tional dismiss button in   </p>
-                                <p><a href="#" class="btn btn-success" role="button">Add To Cart</a> <a href="#" class="btn btn-primary" role="button">See Details</a></p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.col -->
+                    <?php
+
+					$var = "";
+
+					$sql = "SELECT * FROM products";
+					$result = $conn->query($sql);
+
+					if ($result->num_rows > 0) {
+						// output data of each row
+						while($row = $result->fetch_assoc()) {
+							?>
+							
+									<div class="col-md-4 text-center col-sm-6 col-xs-6">
+											<div class="thumbnail product-box">
+												<img src="assets/img/<?php echo $row["pimg"] ?>" alt="" style="width:166px;height:162px;"/>
+												<div class="caption">
+													<h3><a href="#"><?php echo $row["pname"] ?></a></h3>
+													<p>Price : <strong>$<?php echo $row["pprice"] ?></strong>  </p>
+													<p>No. of Products remaining: <?php echo $row["pavail"] ?>  </p>
+													<p>Details: <?php echo $row["pdesc"] ?>  </p>
+													<p><a href="#" class="btn btn-success" role="button">Add To Cart</a> <a href="<?php echo "product.php?name=" .$row["pid"] ?>" class="btn btn-primary" role="button">See Details</a></p>
+												</div>
+											</div>
+									</div>
+									<?php
+						}
+					} else {
+						echo "0 results";
+					}
+					?>
+
                 </div>
                 <!-- /.row -->
                 
@@ -416,54 +357,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- /.row -->
-                <div class="row">
-                    <div class="col-md-4 text-center col-sm-6 col-xs-6">
-                        <div class="thumbnail product-box">
-                            <img src="assets/img/dummyimg.png" alt="" />
-                            <div class="caption">
-                                <h3><a href="#">Samsung Galaxy </a></h3>
-                                <p>Price : <strong>$ 3,45,900</strong>  </p>
-                                <p><a href="#">Ptional dismiss button </a></p>
-                                <p>Ptional dismiss button in tional dismiss button in   </p>
-                                <p>
-                                    <a href="#" class="btn btn-success" role="button">Add To Cart</a>
-                                    <a href="#" class="btn btn-primary" role="button">See Details</a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-md-4 text-center col-sm-6 col-xs-6">
-                        <div class="thumbnail product-box">
-                            <img src="assets/img/dummyimg.png" alt="" />
-                            <div class="caption">
-                                <h3><a href="#">Samsung Galaxy </a></h3>
-                                <p>Price : <strong>$ 3,45,900</strong>  </p>
-                                <p><a href="#">Ptional dismiss button </a></p>
-                                <p>Ptional dismiss button in tional dismiss button in   </p>
-                                <p><a href="#" class="btn btn-success" role="button">Add To Cart</a> <a href="#" class="btn btn-primary" role="button">See Details</a></p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-md-4 text-center col-sm-6 col-xs-6">
-                        <div class="thumbnail product-box">
-                            <img src="assets/img/dummyimg.png" alt="" />
-                            <div class="caption">
-                                <h3><a href="#">Samsung Galaxy </a></h3>
-                                <p>Price : <strong>$ 3,45,900</strong>  </p>
-                                <p><a href="#">Ptional dismiss button </a></p>
-                                <p>Ptional dismiss button in tional dismiss button in   </p>
-                                <p><a href="#" class="btn btn-success" role="button">Add To Cart</a> <a href="#" class="btn btn-primary" role="button">See Details</a></p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /.col -->
-                </div>
-                <!-- /.row -->
-                
-                <!-- /.row -->
             </div>
             <!-- /.col -->
         </div>
