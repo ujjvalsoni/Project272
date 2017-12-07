@@ -1,3 +1,14 @@
+<?php
+/*
+session_start();
+if(!isset($_SESSION['access_token'])){
+header('location: login.php');
+exit();
+}
+*/
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -323,7 +334,7 @@ if ($result->num_rows > 0) {
 													<p>Price : <strong>$<?php echo $row["pprice"] ?></strong>  </p>
 													<p>No. of Products remaining: <?php echo $row["pavail"] ?>  </p>
 													<p>Details: <?php echo $row["pdesc"] ?>  </p>
-													<p><a href="#" class="btn btn-success" role="button">Add To Cart</a> <a href="<?php echo "product.php?name=" .$row["pid"] ?>" class="btn btn-primary" role="button">See Details</a></p>
+													<p><a href="#" class="btn btn-success" role="button">Add To Cart</a> <a href="<?php echo "card/product.php?name=" .$row["pid"] ?>" class="btn btn-primary" role="button">See Details</a></p>
 												</div>
 											</div>
 									</div>
