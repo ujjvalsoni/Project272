@@ -31,33 +31,49 @@ $pid = htmlspecialchars($_GET["name"]);
 </div>
 <div class="right">
 <p><?php echo $row["pdesc"] ?> </p>
-<?php $conn->close(); ?>
 <?php
-include '..\connection.php';
-
-					$sql = "SELECT AVG(rating) from ratings WHICH PID =$pid";
-					$result = $conn->query($sql);
-					//echo $result;
-
-					if ($result->num_rows > 0) {
-						// output data of each row
-					while($row = $result->fetch_assoc()) {
-						echo $rows;
-						
+						}
+					} else {
+						echo "0 results";
 					}
 					
-					}
+include '..\connection.php';
+$average = 0;
 
+
+
+        $result = mysqli_query($conn ,"SELECT AVG(rating) FROM ratings WHERE pid=$pid");
+		while($row = mysqli_fetch_array($result))
+        {
+            $average = round($row['AVG(rating)']);
+			$total = 5 - $average;
+		}
+
+?>		
+<p>
+<?php 
+$i = 0;
+for($i = 0; $i<$average; $i++){
+	?><span class="fa fa-star yellow"></span><?php
+}
 ?>
 
-<p>
-<span class="fa fa-star yellow"></span>
-<span class="fa fa-star yellow"></span>
-<span class="fa fa-star yellow"></span>
-<span class="fa fa-star yellow"></span>
-<span class="fa fa-star"></span>
-<span>(4.67 - 172 reviews)</span>
+<?php for($i = 0; $i<$total; $i++){
+	?><span class="fa fa-star"></span><?php
+}
+?>
+<span>
+<?php
+$count = mysqli_query($conn, "SELECT * FROM ratings WHERE pid=$pid");
+        $num_rows = mysqli_num_rows($count);
+        echo "(";
+		echo $num_rows;
+		echo " rating(s))"
+		?>
+
+</span>
 </p>
+
 <p class="quantity">QUANTITY <span id="qt">1</span></span></p>
  <form method = "POST" action = "rating.php">
 
@@ -99,12 +115,7 @@ include '..\connection.php';
 </div>
 </div>
 </div>
-									<?php
-						}
-					} else {
-						echo "0 results";
-					}
-					?>
+
 <body>
 
 <script src='http://facebook.github.io/rebound-js/rebound.js'></script>
