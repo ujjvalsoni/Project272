@@ -16,7 +16,7 @@ exit();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Bootstrap E-Commerce Template- DIGI Shop mini</title>
+    <title>Market Place!</title>
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
     <!-- Fontawesome core CSS -->
@@ -52,20 +52,6 @@ exit();
                     <li><a href="#">Login</a></li>
                     <li><a href="#">Signup</a></li>
 
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">24x7 Support <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#"><strong>Call: </strong>+09-456-567-890</a></li>
-                            <li><a href="#"><strong>Mail: </strong>info@yourdomain.com</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#"><strong>Address: </strong>
-                                <div>
-                                    234, New york Street,<br />
-                                    Just Location, USA
-                                </div>
-                            </a></li>
-                        </ul>
-                    </li>
                 </ul>
                 <form class="navbar-form navbar-right" role="search">
                     <div class="form-group">
@@ -112,7 +98,7 @@ if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
 		?>
-            <li><a href="#">
+            <li><a href="<?php echo "card/product.php?name=" .$row["pid"] ?>">
             <img src="assets/img/<?php echo $row["pimg"] ?>" alt="img05"><h4><?php echo $row["pname"] ?></h4>
             </a></li>
 			<?php
@@ -153,14 +139,14 @@ if ($result->num_rows > 0) {
                 <div class=" col-md-12 col-sm-6 col-xs-6">
                     <div class="thumbnail product-box">
                         <div class="caption">
-                          <p> All Website of Market</p>  
+                          <p>Original Websites</p>  
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
                 
-                    <a href="#" class="list-group-item active">Original Websites
+                    <a href="#" class="list-group-item active">Click for more!
                     </a>
                     <ul class="list-group">
 
@@ -180,114 +166,112 @@ if ($result->num_rows > 0) {
         <div class="row">
             <div class="col-md-3">
                 <div>
-                    <a href="#" class="list-group-item active">Website - 1 
+                    <a href="#" class="list-group-item active">Top 5!!! 
                     </a>
-                    <ul class="list-group">
-
-                        <li class="list-group-item">Product - 1
-      					<span class="label label-primary pull-right">234</span>
-                        </li>
-                        <li class="list-group-item">Product - 2
-                      <span class="label label-success pull-right">34</span>
-                        </li>
-                        <li class="list-group-item">Product - 3
-                         <span class="label label-danger pull-right">4</span>
-                        </li>
-                       
+                    <ul class="list-group">						
+						<?php
+						
+						   $result = mysqli_query($conn ,"SELECT pid FROM products ORDER BY pid DESC LIMIT 1;");        
+        while($row = mysqli_fetch_array($result))
+        {
+			$total_rows = $row[0];
+        }
+		
+    for ($x = 1; $x <= $total_rows ; $x++)
+    {
+        $result = mysqli_query($conn ,"SELECT AVG(rating) FROM ratings WHERE pid=$x") or die(mysql_error());        
+        while($row = mysqli_fetch_array($result))
+        {
+            if (empty($row['AVG(rating)'])) {
+				$data[$x] = 0;
+			}
+			else{
+			$data[$x] = $row['AVG(rating)'];
+			}
+        }
+    
+    }
+    //print_r($data);
+	arsort($data);
+	
+    
+    $topfive = array_slice($data, 0, 5, true);
+    
+    foreach ($topfive as $key => $value)
+    {
+		//echo "$key";
+		$result = mysqli_query($conn ,"SELECT pname FROM products WHERE pid=$key");        
+        while($row = mysqli_fetch_array($result))
+        {
+           
+		   ?>
+		  <a href = "<?php echo "card/product.php?name=" .$key ?>"> <li class="list-group-item"><?php echo $row['pname']; ?> 
+      					<span class="label label-primary pull-right"><?php echo round($value);?>/5</span>
+           </li></a>
+		   <?php
+        }
+    }
+?>  
                     </ul>
                 </div>
-                <!-- /.div -->
-                <div>
-                    <a href="#" class="list-group-item active">Website - 2
+
+				<?php
+				//individual websites top 5
+				
+				    for ($x = 1; $x <= 3 ; $x++)
+
+    {
+		?>
+					
+					<div>
+                    <a href="#" class="list-group-item active">Website - <?php echo $x; ?> Top 5!
                     </a>
                     <ul class="list-group">
+					<?php
+					
+        $result = mysqli_query($conn ,"SELECT pid,AVG(rating) ar FROM ratings where pid IN (SELECT pid FROM products 
+        WHERE sid=$x) GROUP BY pid ORDER BY ar DESC") or die(mysql_error());
 
-                        <li class="list-group-item">Product - 1
-      					<span class="label label-primary pull-right">234</span>
-                        </li>
-                        <li class="list-group-item">Product - 2
-                      <span class="label label-success pull-right">34</span>
-                        </li>
-                        <li class="list-group-item">Product - 3
-                         <span class="label label-danger pull-right">4</span>
-                        </li>
-                       
-                    </ul>
-                </div>
-                <!-- /.div -->
-                <div>
-                    <a href="#" class="list-group-item active">Website - 3
-                    </a>
-                    <ul class="list-group">
+        while($row = mysqli_fetch_array($result))
+        {
+            $allids[$row[0]] = $row[1];
+        }
+        
+		$topfivei = array_slice($allids , 0 ,5 ,true); 
+        //echo "Product array: <br>";
+        foreach ($topfivei as $key => $value)
+        {
+            //echo "{$key} = {$value}";
+			$result = mysqli_query($conn ,"SELECT pname FROM products WHERE pid=$key");        
+			while($row = mysqli_fetch_array($result))
+			{
+			   //echo $row['pname'];
+			   ?>
 
-                        <li class="list-group-item">Product - 1
-      					<span class="label label-primary pull-right">234</span>
-                        </li>
-                        <li class="list-group-item">Product - 2
-                      <span class="label label-success pull-right">34</span>
-                        </li>
-                        <li class="list-group-item">Product - 3
-                         <span class="label label-danger pull-right">4</span>
-                        </li>
-                       
-                    </ul>
-                </div>
-                <!-- /.div -->
-                <div>
-                    <a href="#" class="list-group-item active">Website - 4
-                    </a>
-                    <ul class="list-group">
 
-                        <li class="list-group-item">Product - 1
-      					<span class="label label-primary pull-right">234</span>
-                        </li>
-                        <li class="list-group-item">Product - 2
-                      <span class="label label-success pull-right">34</span>
-                        </li>
-                        <li class="list-group-item">Product - 3
-                         <span class="label label-danger pull-right">4</span>
-                        </li>
+                        <a href = "<?php echo "card/product.php?name=" .$key ?>"><li class="list-group-item"><?php echo $row['pname']; ?>
+      					<span class="label label-primary pull-right"><?php echo round($value); ?>/5</span>
+                        </li></a>
                        
-                    </ul>
-                </div>
-                <!-- /.div -->
-                <div>
-                    <a href="#" class="list-group-item active">Website - 5
-                    </a>
-                    <ul class="list-group">
+             
+			   <?php
+			}
+			}
 
-                        <li class="list-group-item">Product - 1
-      					<span class="label label-primary pull-right">234</span>
-                        </li>
-                        <li class="list-group-item">Product - 2
-                      <span class="label label-success pull-right">34</span>
-                        </li>
-                        <li class="list-group-item">Product - 3
-                         <span class="label label-danger pull-right">4</span>
-                        </li>
-                       
-                    </ul>
-                </div>
-                <!-- /.div -->
-                <div>
-                    <a href="#" class="list-group-item active">Website - 6
-                    </a>
-                    <ul class="list-group">
-
-                        <li class="list-group-item">Product - 1
-      					<span class="label label-primary pull-right">234</span>
-                        </li>
-                        <li class="list-group-item">Product - 2
-                      <span class="label label-success pull-right">34</span>
-                        </li>
-                        <li class="list-group-item">Product - 3
-                         <span class="label label-danger pull-right">4</span>
-                        </li>
-                       
-                    </ul>
-                </div>
-                <!-- /.div -->
-                
+        unset($topfivei); 
+		unset($allids); 
+		
+				?>
+					
+					       </ul>
+					</div>
+					<?php
+    }
+				
+					
+				
+				?>
+                               
             </div>
             <!-- /.col -->
             <div class="col-md-9">
@@ -330,7 +314,7 @@ if ($result->num_rows > 0) {
 											<div class="thumbnail product-box">
 												<img src="assets/img/<?php echo $row["pimg"] ?>" alt="" style="width:166px;height:162px;"/>
 												<div class="caption">
-													<h3><a href="#"><?php echo $row["pname"] ?></a></h3>
+													<h3><a href="<?php echo "card/product.php?name=" .$row["pid"] ?>"><?php echo $row["pname"] ?></a></h3>
 													<p>Price : <strong>$<?php echo $row["pprice"] ?></strong>  </p>
 													<p>No. of Products remaining: <?php echo $row["pavail"] ?>  </p>
 													<p>Details: <?php echo $row["pdesc"] ?>  </p>
@@ -414,13 +398,11 @@ if ($result->num_rows > 0) {
                 <strong>Our Location</strong>
                 <hr>
                 <p>
-                     234, New york Street,<br />
-                                    Just Location, USA<br />
-                    Call: +09-456-567-890<br>
-                    Email: info@yourdomain.com<br>
+                     1 Washington Sq,<br />
+                     San Jose, CA 95192<br />
+                     Call: +1 (999) 999 9999<br>
+                    Email: coolgroup@cmpe272.com<br>
                 </p>
-
-                2014 www.yourdomain.com | All Right Reserved
             </div>
             <div class="col-md-4 social-box">
                 <strong>We are Social </strong>
@@ -430,9 +412,7 @@ if ($result->num_rows > 0) {
                 <a href="#"><i class="fa fa-google-plus-square fa-3x c"></i></a>
                 <a href="#"><i class="fa fa-linkedin-square fa-3x "></i></a>
                 <a href="#"><i class="fa fa-pinterest-square fa-3x "></i></a>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. Curabitur nec nisl odio. Mauris vehicula at nunc id posuere. 
-                </p>
+                
             </div>
         </div>
         <hr>
